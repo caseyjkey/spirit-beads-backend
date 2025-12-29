@@ -1,0 +1,22 @@
+2025-12-29 02:40:08 +00:00: Watching for file changes with StatReloader
+2025-12-29 02:40:09 +00:00: Exception in thread django-main-thread:
+2025-12-29 02:40:09 +00:00: Traceback (most recent call last):
+2025-12-29 02:40:09 +00:00:   File "/usr/lib64/python3.9/threading.py", line 980, in _bootstrap_inner
+2025-12-29 02:40:09 +00:00:     self.run()
+2025-12-29 02:40:09 +00:00:   File "/usr/lib64/python3.9/threading.py", line 917, in run
+2025-12-29 02:40:09 +00:00:     self._target(*self._args, **self._kwargs)
+2025-12-29 02:40:09 +00:00:   File "/var/www/spirit-bead-backend/venv/lib64/python3.9/site-packages/django/utils/autoreload.py", line 64, in wrapper
+2025-12-29 02:40:09 +00:00:     fn(*args, **kwargs)
+2025-12-29 02:40:09 +00:00:   File "/var/www/spirit-bead-backend/venv/lib64/python3.9/site-packages/django/core/management/commands/runserver.py", line 136, in inner_run
+2025-12-29 02:40:09 +00:00:     self.check_migrations()
+2025-12-29 02:40:09 +00:00:   File "/var/www/spirit-bead-backend/venv/lib64/python3.9/site-packages/django/core/management/base.py", line 574, in check_migrations
+2025-12-29 02:40:09 +00:00:     executor = MigrationExecutor(connections[DEFAULT_DB_ALIAS])
+2025-12-29 02:40:09 +00:00:   File "/var/www/spirit-bead-backend/venv/lib64/python3.9/site-packages/django/db/migrations/executor.py", line 18, in __init__
+2025-12-29 02:40:09 +00:00:     self.loader = MigrationLoader(self.connection)
+2025-12-29 02:40:09 +00:00:   File "/var/www/spirit-bead-backend/venv/lib64/python3.9/site-packages/django/db/migrations/loader.py", line 58, in __init__
+2025-12-29 02:40:09 +00:00:     self.build_graph()
+2025-12-29 02:40:09 +00:00:   File "/var/www/spirit-bead-backend/venv/lib64/python3.9/site-packages/django/db/migrations/loader.py", line 229, in build_graph
+2025-12-29 02:40:09 +00:00:     self.load_disk()
+2025-12-29 02:40:09 +00:00:   File "/var/www/spirit-bead-backend/venv/lib64/python3.9/site-packages/django/db/migrations/loader.py", line 130, in load_disk
+2025-12-29 02:40:09 +00:00:     raise BadMigrationError(
+2025-12-29 02:40:09 +00:00: django.db.migrations.exceptions.BadMigrationError: Migration 0003_create_sample_images in app products has no Migration class
