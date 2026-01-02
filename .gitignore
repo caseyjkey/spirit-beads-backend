@@ -14,6 +14,13 @@ staticfiles/
 venv/
 env/
 ENV/
+pyvenv.cfg
+bin/
+lib/
+lib64/
+
+# Logs
+logs/
 
 # IDE
 .vscode/
