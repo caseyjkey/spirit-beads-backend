@@ -1,7 +1,8 @@
 import os
+import shutil
 from pathlib import Path
 from django.core.management.base import BaseCommand
-from django.core.files import File
+from django.conf import settings
 from django.db import transaction
 from decimal import Decimal
 from products.models import Product, Category
@@ -145,7 +146,22 @@ class Command(BaseCommand):
             defaults={'slug': parsed['category'].lower().replace('-', '-')}
         )
         
-        # Create the product
+        # Ensure media/products directory exists
+        media_products_dir = Path(settings.MEDIA_ROOT) / 'products'
+        media_products_dir.mkdir(parents=True, exist_ok=True)
+
+        # Copy images to media/products directory (preserving original names)
+        primary_dest = media_products_dir / images['primary'].name
+        if not primary_dest.exists():
+            shutil.copy2(images['primary'], primary_dest)
+
+        secondary_dest = None
+        if 'secondary' in images:
+            secondary_dest = media_products_dir / images['secondary'].name
+            if not secondary_dest.exists():
+                shutil.copy2(images['secondary'], secondary_dest)
+
+        # Create the product without images first
         product = Product.objects.create(
             id=product_id,
             name=parsed['name'],
@@ -156,23 +172,16 @@ class Command(BaseCommand):
             price=price_cents,
             description=f"Beautiful {parsed['category']} pattern lighter - {parsed['name']}"
         )
-        
-        # Save primary image
-        with open(images['primary'], 'rb') as f:
-            product.primary_image.save(
-                images['primary'].name,
-                File(f),
-                save=True
-            )
-        
-        # Save secondary image if available
-        if 'secondary' in images:
-            with open(images['secondary'], 'rb') as f:
-                product.secondary_image.save(
-                    images['secondary'].name,
-                    File(f),
-                    save=True
-                )
+
+        # Set image paths directly using update() to bypass Django's file handling
+        # This prevents Django from adding a suffix to the filename
+        update_fields = {
+            'primary_image': f'products/{images["primary"].name}'
+        }
+        if secondary_dest:
+            update_fields['secondary_image'] = f'products/{images["secondary"].name}'
+
+        Product.objects.filter(pk=product.pk).update(**update_fields)
         
         product_name = f"{parsed['name']} - {parsed['category']}"
         self.stdout.write(
