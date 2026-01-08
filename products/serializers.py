@@ -20,8 +20,8 @@ class ProductSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
         fields = [
-            'id', 'name', 'slug', 'lighter_type', 'lighter_type_display', 'pattern', 'custom_pattern', 'pattern_display', 
-            'price', 'description', 'primary_image', 'secondary_image', 'is_sold_out', 'is_active', 
+            'id', 'name', 'slug', 'lighter_type', 'lighter_type_display', 'pattern', 'pattern_display', 
+            'price', 'category', 'description', 'primary_image', 'secondary_image', 'is_sold_out', 'is_active', 
             'inventory_count', 'weight_ounces', 'images', 'is_in_stock',
             'created_at', 'updated_at'
         ]
@@ -35,8 +35,8 @@ class ProductListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
         fields = [
-            'id', 'name', 'slug', 'lighter_type', 'lighter_type_display', 'pattern', 'custom_pattern', 'pattern_display',
-            'price', 'is_sold_out', 'inventory_count', 'primary_image', 'is_in_stock'
+            'id', 'name', 'slug', 'lighter_type', 'lighter_type_display', 'pattern', 'pattern_display',
+            'price', 'category', 'is_sold_out', 'inventory_count', 'primary_image', 'is_in_stock'
         ]
 
     def get_primary_image(self, obj):

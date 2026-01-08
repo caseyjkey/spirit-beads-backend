@@ -52,7 +52,6 @@ class Product(models.Model):
         default=LIGHTER_TYPE_CLASSIC
     )
     pattern = models.CharField(max_length=50, choices=PATTERN_CHOICES)
-    custom_pattern = models.CharField(max_length=100, blank=True, help_text="Enter custom pattern name")
     
     price = models.IntegerField(
         help_text="Price in cents (admin editable)"
@@ -76,6 +75,14 @@ class Product(models.Model):
         editable=False
     )
     
+    category = models.ForeignKey(
+        'Category', 
+        on_delete=models.SET_NULL, 
+        null=True, 
+        blank=True,
+        related_name='products'
+    )
+    
     description = models.TextField(blank=True)
     primary_image = models.ImageField(upload_to='products/', blank=True, null=True)
     secondary_image = models.ImageField(upload_to='products/', blank=True, null=True)
@@ -95,14 +102,10 @@ class Product(models.Model):
         ordering = ['name']
 
     def __str__(self):
-        if self.pattern == 'custom' and self.custom_pattern:
-            return f"{self.name} - {self.custom_pattern}"
         return f"{self.name} - {self.get_pattern_display()}"
 
     @property
     def pattern_display(self):
-        if self.pattern == 'custom' and self.custom_pattern:
-            return self.custom_pattern
         return self.get_pattern_display()
 
     @property

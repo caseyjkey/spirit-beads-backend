@@ -38,26 +38,44 @@ def main():
     test_dir = Path("/tmp/test_lighters")
     test_dir.mkdir(exist_ok=True)
     
-    # Test cases based on the specification
-    test_cases = [
-        # Basic case
-        ("Feather-Sun_Infinite-Path_55-1.png", "Feather-Sun\nPrimary", (100, 150, 200)),
-        ("Feather-Sun_Infinite-Path_55-2.png", "Feather-Sun\nSecondary", (200, 150, 100)),
-        
-        # Different categories
-        ("Mountain-View_Earths-Hue_45-1.png", "Mountain-View\nPrimary", (150, 200, 100)),
-        ("Mountain-View_Earths-Hue_45-2.png", "Mountain-View\nSecondary", (100, 200, 150)),
-        
-        ("Ocean-Wave_Traditional-Rhythms_60-1.png", "Ocean-Wave\nPrimary", (200, 100, 150)),
-        ("Ocean-Wave_Traditional-Rhythms_60-2.png", "Ocean-Wave\nSecondary", (150, 100, 200)),
-        
-        # Single image (no secondary)
-        ("Desert-Rose_Ancestral-Motifs_50-1.png", "Desert-Rose\nPrimary", (180, 180, 100)),
-        
-        # Complex name with hyphens
-        ("Double-Eagle_Spirit-Path_75-1.png", "Double-Eagle\nPrimary", (120, 180, 180)),
-        ("Double-Eagle_Spirit-Path_75-2.png", "Double-Eagle\nSecondary", (180, 120, 180)),
+    # Generate 50 diverse test cases
+    import random
+    
+    names = [
+        "Feather-Sun", "Mountain-View", "Ocean-Wave", "Desert-Rose", "Double-Eagle",
+        "Spirit-Wolf", "Moon-Dance", "Star-Fire", "Wind-Whisper", "River-Stone",
+        "Forest-Dream", "Thunder-Bolt", "Lightning-Strike", "Crystal-Heart", "Eagle-Eye",
+        "Wolf-Spirit", "Bear-Claw", "Hawk-Flight", "Snake-Charm", "Lion-Heart",
+        "Dragon-Breath", "Phoenix-Rise", "Tiger-Stripe", "Leopard-Spot", "Cheetah-Run",
+        "Panther-Prowl", "Jaguar-Spirit", "Cobra-Strike", "Viper-Fang", "Python-Coil",
+        "Eagle-Wing", "Hawk-Talon", "Owl-Wisdom", "Raven-Cry", "Crow-Flight",
+        "Sparrow-Song", "Robin-Red", "Blue-Jay", "Cardinal-Song", "Finch-Dance",
+        "Swallow-Flight", "Swan-Grace", "Goose-Flight", "Duck-Paddle", "Heron-Stand",
+        "Egret-White", "Stork-Flight", "Crane-Dance", "Flamingo-Pink", "Pelican-Dive"
     ]
+    
+    categories = [
+        "Infinite-Path", "Earths-Hue", "Traditional-Rhythms", "Ancestral-Motifs", "Spirit-Path",
+        "Cosmic-Dance", "Sacred-Geometry", "Ancient-Wisdom", "Mystic-Journey", "Divine-Light"
+    ]
+    
+    test_cases = []
+    for i in range(50):
+        name = names[i % len(names)]
+        category = random.choice(categories)
+        price = random.randint(35, 85)
+        
+        # Generate random color
+        color = (random.randint(50, 200), random.randint(50, 200), random.randint(50, 200))
+        
+        # Always create primary image
+        test_cases.append((f"{name}_{category}_{price}-1.png", f"{name}\nPrimary", color))
+        
+        # 70% chance of having secondary image
+        if random.random() < 0.7:
+            # Complementary color for secondary
+            secondary_color = (255 - color[0], 255 - color[1], 255 - color[2])
+            test_cases.append((f"{name}_{category}_{price}-2.png", f"{name}\nSecondary", secondary_color))
     
     for filename, text, color in test_cases:
         filepath = test_dir / filename
