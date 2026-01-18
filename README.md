@@ -30,8 +30,8 @@ Follow these instructions to get the project running locally for development and
 ### Installation
 1.  **Clone the repository:**
     ```sh
-    git clone https://github.com/caseyjkey/spirit-beads-backend.git
-    cd spirit-beads-backend
+    git clone https://github.com/caseyjkey/spirit-beads-service.git
+    cd spirit-beads-service
     ```
 2.  **Create and activate a virtual environment:**
     ```sh
@@ -74,13 +74,7 @@ This project serves as a powerful example of a scalable e-commerce backend.
 -   **Stripe Synchronization**: The `Product` model features an overridden `save()` method that synchronizes product data with Stripe. When a new product is created or an existing product's price is changed, it calls the `ensure_stripe_product_and_price` service. This service creates a corresponding product and price object in Stripe, storing their IDs (`stripe_product_id`, `stripe_price_id`) in the database. This keeps the local product catalog as the single source of truth while leveraging Stripe's robust infrastructure for transactions.
 -   **Custom Order Lifecycle**: The `CustomOrderRequest` model is the centerpiece of the custom order workflow. A request begins in a `pending` state. An administrator can review it via the Django Admin, add notes, and set a `quoted_price`. Upon approval, the system can generate a `stripe_payment_link`. Once the customer completes payment, the request is transitioned to `paid`, and a corresponding `orders.Order` object is created to bring it into the standard order fulfillment pipeline.
 ## 📚 Related Projects
--   **[lighter-splitter](https://github.com/caseyjkey/lighter-splitter)** - Spirit Beads ecosystem - image processing pipeline
--   **[spirit-beads-service](https://github.com/caseyjkey/spirit-beads-service)** - Service layer architecture
--   **[spirit-beads-ui](https://github.com/caseyjkey/spirit-beads-ui)** - React 18 production frontend
 
-
-## Related Projects
-
-- **[lighter-splitter](https://github.com/caseyjkey/lighter-splitter)** - Spirit Beads ecosystem - image processing pipeline
-- **[spirit-beads-service](https://github.com/caseyjkey/spirit-beads-service)** - Service layer architecture
+- **[spirit-beads-backend](https://github.com/caseyjkey/spirit-beads-backend)** - Django REST API backend (main repo)
 - **[spirit-beads-ui](https://github.com/caseyjkey/spirit-beads-ui)** - React 18 production frontend
+- **[lighter-splitter](https://github.com/caseyjkey/lighter-splitter)** - Spirit Beads ecosystem - image processing pipeline
