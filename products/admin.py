@@ -12,6 +12,7 @@ class CategoryAdmin(admin.ModelAdmin):
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
     form = ProductAdminForm
+    exclude = ['id']  # Auto-generate UUID for new products
     list_display = (
         "name",
         "category",
@@ -62,7 +63,15 @@ class ProductAdmin(admin.ModelAdmin):
         count = queryset.count()
         queryset.update(is_active=False)
         self.message_user(request, f"Successfully archived {count} product(s). They will no longer appear in the store.")
-    
+
+    def save_model(self, request, obj, form, change):
+        """Auto-generate UUID for new products"""
+        if not change:  # Creating a new product
+            import uuid
+            if not obj.id:
+                obj.id = str(uuid.uuid4())
+        super().save_model(request, obj, form, change)
+
     list_filter = ['is_sold_out', 'is_active', 'created_at']
     search_fields = ['name', 'category__name']
     prepopulated_fields = {'slug': ('name',)}
