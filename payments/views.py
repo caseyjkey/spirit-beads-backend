@@ -337,14 +337,17 @@ def stripe_webhook(request):
                 # Update amount_total to include shipping selected by customer
                 order.amount_total = int(session.amount_total)
 
-                # Get address from customer_details (this is where Stripe Checkout stores it)
-                if (session.customer_details and
-                    hasattr(session.customer_details, 'address') and
-                    session.customer_details.address):
-                    print(f"Address found in customer_details: {session.customer_details.address}")
-                    order.shipping_address = session.customer_details.address
+                # Get shipping address from shipping_details (when shipping_address_collection is enabled)
+                # Stripe stores shipping address in shipping_details, not customer_details
+                if session.get('shipping_details') and session['shipping_details'].get('address'):
+                    shipping_address = session['shipping_details']['address']
+                    # Add name from shipping details if available
+                    if session['shipping_details'].get('name'):
+                        shipping_address['name'] = session['shipping_details']['name']
+                    order.shipping_address = shipping_address
+                    print(f"Shipping address found: {shipping_address}")
                 else:
-                    print("No address found")
+                    print("No shipping address found in shipping_details")
                     order.shipping_address = None
 
                 order.save()
