@@ -19,6 +19,7 @@ class ProductAdminForm(forms.ModelForm):
     class Meta:
         model = Product
         fields = '__all__'
+        exclude = ['id']  # Exclude id - will be auto-generated in admin save_model
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
