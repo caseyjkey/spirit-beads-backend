@@ -1,5 +1,6 @@
 import uuid
 import requests
+import logging
 from rest_framework.decorators import api_view, permission_classes, authentication_classes
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
@@ -11,6 +12,8 @@ from orders.models import Order, OrderItem
 from products.models import Product
 from decimal import Decimal
 import os
+
+logger = logging.getLogger(__name__)
 
 def get_customer_country(request):
     """
@@ -45,7 +48,7 @@ def get_customer_country(request):
             data = response.json()
             return data.get('country', 'US')  # Default to US if not found
     except Exception as e:
-        print(f"Could not detect country from IP: {e}")
+        logger.warning(f"Could not detect country from IP: {e}")
 
     return 'US'  # Default to US
 
@@ -166,7 +169,7 @@ def create_checkout_session(request):
 
     # Detect customer country from IP address
     customer_country = get_customer_country(request)
-    print(f"Detected customer country: {customer_country}")
+    logger.info(f"Detected customer country: {customer_country}")
 
     # Set up shipping option based on detected country
     SHIPPING_COST_USA = 500  # $5.00
@@ -220,7 +223,7 @@ def create_checkout_session(request):
                 }
             })
     except Exception as e:
-        print(f"Warning: Could not create shipping options: {e}")
+        logger.warning(f"Could not create shipping options: {e}")
 
     try:
         session = stripe.checkout.Session.create(
