@@ -1,0 +1,41 @@
+name: Deploy to EC2
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: self-hosted
+    steps:
+      - name: Deploy
+        run: |
+          export PATH=/home/ec2-user/.bun/bin:$PATH
+          cd /var/www/spirit-beads-service
+
+          # Pull latest changes
+          echo "Pulling latest changes..."
+          git fetch origin
+          git reset --hard origin/main
+
+          # Activate venv and install dependencies
+          echo "Activating venv..."
+          source venv/bin/activate
+          pip install --quiet
+
+          # Run database migrations
+          echo "Running migrations..."
+          python manage.py migrate --noinput
+
+          # Collect static files
+          echo "Collecting static files..."
+          python manage.py collectstatic --noinput
+
+          # Restart service via PM2
+          echo "Restarting service..."
+          pm2 restart spirit-beads-service
+
+          # Show status
+          echo "Deployment complete. Status:"
+          pm2 list | grep spirit-beads
