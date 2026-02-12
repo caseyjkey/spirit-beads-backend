@@ -43,4 +43,6 @@ media/products/
 media/custom_orders/
 
 # Claude Code
-.claude/
+.claude/dist/
+.pm2/
+bun.lock
